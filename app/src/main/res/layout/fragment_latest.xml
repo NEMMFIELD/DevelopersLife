@@ -8,16 +8,12 @@
     app:cardCornerRadius="8dp"
     android:layout_margin="5dp"
     android:elevation="10dp">
-<FrameLayout
-    android:id="@+id/frameLayout2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context=".ui.LatestFragment">
 
     <ImageView
         android:id="@+id/gifurllatest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:scaleType="centerCrop"
         tools:src="@android:drawable/alert_dark_frame" />
 
@@ -25,7 +21,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-
         android:orientation="vertical" >
     <TextView
         android:id="@+id/textView_latest"
@@ -39,7 +34,31 @@
         android:textColor="#F3F6FB"
         android:textSize="18sp"
         />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/btn_prev"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/leftarrow"
+                android:src="?android:selectableItemBackground"
+                />
+        <ImageButton
+            android:id="@+id/btn_next"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/arrowsicon"
+            android:src="?android:selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
     </LinearLayout>
 
-</FrameLayout>
 </androidx.cardview.widget.CardView>

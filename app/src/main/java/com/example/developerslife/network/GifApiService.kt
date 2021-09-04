@@ -4,10 +4,10 @@ import com.example.developerslife.data.FinalList
 import com.example.developerslife.data.Model
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface GifApiService {
-    @GET("latest/0?json=true")
-    suspend fun getGifs(): Response<FinalList>
-    @GET("daily/0?json=true")
-    suspend fun getGifsDaily(): Response<FinalList>
+    @GET("random?json=true")
+    suspend fun getGifs(): Response<Model>
 }
