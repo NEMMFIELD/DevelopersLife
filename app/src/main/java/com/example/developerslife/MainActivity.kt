@@ -21,6 +21,6 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container_view, LatestFragment().newInstance(ArrayList()))
                 .commit()
         }
-        supportActionBar?.title = Html.fromHtml("<font color='#000000'>Developers Life</font>");
+        supportActionBar?.title = Html.fromHtml("<font color='#000000'>Developers Life</font>")
     }
 }

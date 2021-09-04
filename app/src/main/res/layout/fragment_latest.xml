@@ -6,15 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="8dp"
+    android:background="#F8F8F8"
     android:layout_margin="5dp"
     android:elevation="10dp">
 
     <ImageView
         android:id="@+id/gifurllatest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:scaleType="centerCrop"
         tools:src="@android:drawable/alert_dark_frame" />
 
     <LinearLayout
@@ -28,7 +28,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="@string/hello_blank_fragment"
         android:textStyle="normal"
         android:background="#99000000"
         android:textColor="#F3F6FB"
@@ -59,6 +58,15 @@
             android:clickable="true"
             android:focusable="true" />
     </LinearLayout>
+        <Button
+            android:id="@+id/button_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            android:textStyle="bold"
+            android:text="ПОВТОРИТЬ"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
