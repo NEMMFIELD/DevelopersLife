@@ -5,11 +5,11 @@ import android.os.PersistableBundle
 import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import com.example.developerslife.databinding.ActivityMainBinding
-import com.example.developerslife.ui.LatestFragment
+import com.example.developerslife.ui.GifFragment
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    private var myFragment: LatestFragment? = null
+    private var myFragment: GifFragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         if (savedInstanceState == null) {
-            myFragment = LatestFragment.newInstance()
+            myFragment = GifFragment.newInstance()
             supportFragmentManager.beginTransaction()
 
                 .replace(R.id.fragment_container_view, myFragment!!)
@@ -29,6 +29,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
-        supportFragmentManager.putFragment(outState, "LatestFragment", myFragment!!)
+        supportFragmentManager.putFragment(outState, "GifFragment", myFragment!!)
     }
 }

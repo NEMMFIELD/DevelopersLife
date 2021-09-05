@@ -13,17 +13,17 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.developerslife.R
 import com.example.developerslife.data.Model
-import com.example.developerslife.databinding.FragmentLatestBinding
+import com.example.developerslife.databinding.FragmentGifBinding
 import com.example.developerslife.network.RetrofitService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LatestFragment : Fragment() {
+class GifFragment : Fragment() {
     private val scope = CoroutineScope(Dispatchers.Main)
     private var myList: MutableList<Model> = ArrayList()
     private var index: Int = 0
-    private var _binding: FragmentLatestBinding? = null
+    private var _binding: FragmentGifBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +33,7 @@ class LatestFragment : Fragment() {
             myList = savedInstanceState.getParcelableArrayList<Model>("TAG1") as MutableList<Model>
             index = savedInstanceState.getInt("TAG2")
         }
-        _binding = FragmentLatestBinding.inflate(inflater, container, false)
+        _binding = FragmentGifBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -117,6 +117,6 @@ class LatestFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = LatestFragment()
+        fun newInstance() = GifFragment()
     }
 }
