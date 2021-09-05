@@ -1,4 +1,5 @@
 package com.example.developerslife.ui
+
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class LatestFragment : Fragment() {
     private val scope = CoroutineScope(Dispatchers.Main)
-    private var myList: MutableList<Model> = mutableListOf()
+    private var myList: MutableList<Model> = ArrayList()
     private var index: Int = 0
     private var _binding: FragmentLatestBinding? = null
     private val binding get() = _binding!!
@@ -28,10 +29,19 @@ class LatestFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //Inflate the layout for this fragment
+        if (savedInstanceState != null) {
+            myList = savedInstanceState.getParcelableArrayList<Model>("TAG1") as MutableList<Model>
+            index = savedInstanceState.getInt("TAG2")
+        }
         _binding = FragmentLatestBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList("TAG1", ArrayList(myList))
+        outState.putInt("TAG2", index)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +60,7 @@ class LatestFragment : Fragment() {
             if (myList.size > 0) binding.btnPrev.isEnabled = true
         }
         binding.btnPrev.setOnClickListener {
-            index -= 1
+            index--
             displayPost(myList[index].url!!, myList[index].description!!)
             if (index == 0) binding.btnPrev.isEnabled = false
         }
@@ -59,7 +69,6 @@ class LatestFragment : Fragment() {
             try {
                 loadPost()
             } catch (e: Exception) {
-               // Toast.makeText(context, "Seems like error", Toast.LENGTH_SHORT).show()
                 binding.btnNext.visibility = View.GONE
                 binding.btnPrev.visibility = View.GONE
                 binding.gifurllatest.setImageResource(R.drawable.networkerror)
@@ -99,18 +108,14 @@ class LatestFragment : Fragment() {
         requestOptions.skipMemoryCache(true)
         Glide.with(this)
             .load(url.replace("http", "https"))
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .apply(requestOptions)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.gifurllatest)
         binding.textViewLatest.text = description
     }
 
-    fun newInstance(list: ArrayList<Model>): LatestFragment {
-        val args = Bundle()
-        args.putParcelableArrayList("ARG", list)
-        val fragment = LatestFragment()
-        fragment.arguments = args
-        return fragment
+    companion object {
+        fun newInstance() = LatestFragment()
     }
 }

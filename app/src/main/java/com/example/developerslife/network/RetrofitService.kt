@@ -5,7 +5,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitService {
-    companion object{    val BASE_URL = "https://developerslife.ru/"}
+    companion object {
+        val BASE_URL = "https://developerslife.ru/"
+    }
 
     val api = Retrofit.Builder()
         .baseUrl(BASE_URL)
