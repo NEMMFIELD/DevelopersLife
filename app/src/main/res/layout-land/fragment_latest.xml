@@ -10,11 +10,10 @@
     app:cardCornerRadius="8dp">
 
     <ImageView
-        android:id="@+id/gifurllatest"
+        android:id="@+id/gifurl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:scaleType="fitXY"
         tools:src="@android:drawable/alert_dark_frame" />
 
     <LinearLayout
@@ -24,7 +23,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView_latest"
+            android:id="@+id/textViewGif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

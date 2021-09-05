@@ -71,8 +71,8 @@ class LatestFragment : Fragment() {
             } catch (e: Exception) {
                 binding.btnNext.visibility = View.GONE
                 binding.btnPrev.visibility = View.GONE
-                binding.gifurllatest.setImageResource(R.drawable.networkerror)
-                binding.textViewLatest.text = getString(R.string.network_error)
+                binding.gifurl.setImageResource(R.drawable.networkerror)
+                binding.textViewGif.text = getString(R.string.network_error)
                 binding.buttonRepeat.visibility = View.VISIBLE
             }
         }
@@ -104,15 +104,16 @@ class LatestFragment : Fragment() {
 
         val requestOptions = RequestOptions()
         requestOptions.placeholder(circularProgressDrawable)
-        requestOptions.error(R.drawable.error)
+        requestOptions.error(R.drawable.error).fitCenter()
         requestOptions.skipMemoryCache(true)
+        requestOptions.centerCrop()
         Glide.with(this)
             .load(url.replace("http", "https"))
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .apply(requestOptions)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .into(binding.gifurllatest)
-        binding.textViewLatest.text = description
+            .into(binding.gifurl)
+        binding.textViewGif.text = description
     }
 
     companion object {
