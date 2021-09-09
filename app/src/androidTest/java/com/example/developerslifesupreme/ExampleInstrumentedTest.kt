@@ -1,4 +1,4 @@
-package com.example.developerslife
+package com.example.developerslifesupreme
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

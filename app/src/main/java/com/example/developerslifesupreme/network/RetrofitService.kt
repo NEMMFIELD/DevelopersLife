@@ -1,4 +1,4 @@
-package com.example.developerslife.network
+package com.example.developerslifesupreme.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit

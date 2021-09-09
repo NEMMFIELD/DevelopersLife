@@ -11,7 +11,7 @@
     android:elevation="10dp">
 
     <ImageView
-        android:id="@+id/gifurl_best"
+        android:id="@+id/gifurl_random"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -24,7 +24,7 @@
         android:layout_gravity="bottom"
         android:orientation="vertical" >
         <TextView
-            android:id="@+id/textViewGif_best"
+            android:id="@+id/textViewGif_random"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -40,7 +40,7 @@
             android:layout_gravity="center"
             android:orientation="horizontal">
             <ImageButton
-                android:id="@+id/btn_prev_best"
+                android:id="@+id/btn_prev_random"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="end"
@@ -49,7 +49,7 @@
                 android:src="?android:selectableItemBackground"
                 />
             <ImageButton
-                android:id="@+id/btn_next_best"
+                android:id="@+id/btn_next_random"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="end"
@@ -60,7 +60,7 @@
                 android:focusable="true" />
         </LinearLayout>
         <Button
-            android:id="@+id/button_repeat_best"
+            android:id="@+id/button_repeat_random"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

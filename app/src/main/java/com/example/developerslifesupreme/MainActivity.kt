@@ -1,15 +1,13 @@
-package com.example.developerslife
+package com.example.developerslifesupreme
 
-
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.developerslife.databinding.ActivityMainBinding
-import com.example.developerslife.network.RetrofitService
+import android.text.Html
+import androidx.appcompat.app.AppCompatActivity
+import com.example.developerslifesupreme.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 val tabs = arrayOf(
+    "Случайные",
     "Последние",
     "Лучшие",
     "Горячие"
@@ -19,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.title = Html.fromHtml("<font color='#000000'>Developers Life</font>");
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -30,5 +29,5 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabs[position]
         }.attach()
-
-}}
+    }
+}

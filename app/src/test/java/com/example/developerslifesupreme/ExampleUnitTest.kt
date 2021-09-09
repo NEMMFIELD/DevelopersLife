@@ -1,4 +1,4 @@
-package com.example.developerslife
+package com.example.developerslifesupreme
 
 import org.junit.Test
 
