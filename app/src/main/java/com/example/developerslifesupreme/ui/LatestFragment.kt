@@ -1,7 +1,6 @@
 package com.example.developerslifesupreme.ui
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,7 +19,6 @@ import com.example.developerslifesupreme.network.RetrofitService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Error
 import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match

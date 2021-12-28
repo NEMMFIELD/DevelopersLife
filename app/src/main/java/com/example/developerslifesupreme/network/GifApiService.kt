@@ -15,7 +15,4 @@ interface GifApiService {
     @GET("top/{page}?json=true")
     suspend fun getGifsDaily(@Path("page")page:Int): Response
 
-    @GET("hot/{page}?json=true")
-    suspend fun getGifsHot(@Path("page")page:Int): Response
-
 }

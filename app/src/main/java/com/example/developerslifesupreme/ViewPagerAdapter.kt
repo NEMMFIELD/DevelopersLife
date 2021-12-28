@@ -5,11 +5,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.developerslifesupreme.ui.BestFragment
-import com.example.developerslifesupreme.ui.HotFragment
 import com.example.developerslifesupreme.ui.LatestFragment
 import com.example.developerslifesupreme.ui.RandomFragment
 
-private const val NUM_TABS = 4
+private const val NUM_TABS = 3
 class ViewPagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):FragmentStateAdapter(fragmentManager,lifecycle) {
     override fun getItemCount(): Int = NUM_TABS
 
@@ -18,8 +17,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):Fr
        {
            0 -> return RandomFragment.newInstance()
            1 -> return LatestFragment()
-           2 -> return BestFragment()
-           else -> return HotFragment()
+           else -> return BestFragment()
        }
     }
 }
