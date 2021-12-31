@@ -85,7 +85,7 @@ class RandomFragment : Fragment() {
             }
             if (index == 0) binding.btnPrevRandom.isEnabled = false
         }
-        binding.buttonRepeatRandom.setOnClickListener {
+        binding.buttonRepeatRandom?.setOnClickListener {
             scope.launch {
                 try {
                     loadPost()
@@ -101,7 +101,7 @@ class RandomFragment : Fragment() {
         viewModel.fetchRandomGif()
         binding.btnNextRandom.visibility = View.VISIBLE
         binding.btnPrevRandom.visibility = View.VISIBLE
-        binding.buttonRepeatRandom.visibility = View.GONE
+        binding.buttonRepeatRandom?.visibility = View.GONE
         /*  viewModel.randomGif.value?.gifURL.let {
               it?.let { it1 ->
                   displayPost(
@@ -136,6 +136,7 @@ class RandomFragment : Fragment() {
         val requestOptions = RequestOptions()
         requestOptions.placeholder(circularProgressDrawable)
         requestOptions.error(R.drawable.error128)
+        requestOptions.fitCenter()
         requestOptions.skipMemoryCache(true)
         Glide.with(requireContext())
             .load(url.replace("http", "https"))
@@ -176,11 +177,11 @@ class RandomFragment : Fragment() {
     }
 
     private fun showRepeatButton() {
-        binding.buttonRepeatRandom.visibility = View.VISIBLE
+        binding.buttonRepeatRandom?.visibility = View.VISIBLE
     }
 
     private fun hideRepeatButton() {
-        binding.buttonRepeatRandom.visibility = View.GONE
+        binding.buttonRepeatRandom?.visibility = View.GONE
     }
 
 }

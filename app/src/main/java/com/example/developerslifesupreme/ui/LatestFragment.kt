@@ -7,26 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.example.developerslifesupreme.MainActivity
 import com.example.developerslifesupreme.R
-import com.example.developerslifesupreme.data.ResultItem
+import com.example.developerslifesupreme.Utils.Companion.page
 import com.example.developerslifesupreme.databinding.FragmentLatestBinding
-import com.example.developerslifesupreme.network.RetrofitService
+import com.example.developerslifesupreme.viewmodel.LatestGifViewModel
+import com.example.developerslifesupreme.viewmodel.LatestGifViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 
 class LatestFragment : Fragment() {
-    private var currentPage = 0
+    private lateinit var viewModel: LatestGifViewModel
     private val scope = CoroutineScope(Dispatchers.Main)
-    private val myList: MutableList<ResultItem?>? = mutableListOf()
     private var localIndex: Int = 0
     private var _binding: FragmentLatestBinding? = null
     private val binding get() = _binding!!
@@ -34,81 +35,66 @@ class LatestFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //Inflate the layout for this fragment
         _binding = FragmentLatestBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        scope.launch {
-            try {
-                loadPost(currentPage)
-                displayPost(myList?.get(localIndex)?.gifURL!!, myList[localIndex]?.description!!)
-            }
-            catch (e: Exception)
-            {
-               doIfErr()
-            }
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(
+            this,
+            LatestGifViewModelFactory((requireActivity() as MainActivity).repository)
+        ).get(LatestGifViewModel::class.java)
+        scope.launch { loadPost() }
         binding.btnPrevLatest.isEnabled = false
         binding.btnNextLatest.setOnClickListener {
             localIndex++
             if (localIndex > 0) binding.btnPrevLatest.isEnabled = true
-            if (myList != null) {
-                if (localIndex < myList.size) {
-                    displayPost(
-                        myList.get(localIndex)?.gifURL!!,
-                        myList[localIndex]?.description!!
-                    )
-                }
-                else {
-                    scope.launch {
-                        try {
-                            if (myList.size % 5 == 0) {
-                                currentPage++
-                                loadPost(currentPage)
-                                displayPost(
-                                    myList[localIndex]?.gifURL!!,
-                                    myList[localIndex]?.description!!
-                                )
-                            }
+
+            if (localIndex < viewModel.latestGif.value!!.size) {
+                displayPost(
+                    viewModel.latestGif.value!![localIndex].gifURL!!,
+                    viewModel.latestGif.value!![localIndex].description!!
+                )
+            } else {
+                scope.launch {
+                    try {
+                        if (viewModel.latestGif.value!!.size % 5 == 0) {
+                            page++
+                            loadPost()
+                            displayPost(
+                                viewModel.latestGif.value!![localIndex].gifURL!!,
+                                viewModel.latestGif.value!![localIndex].description!!
+                            )
                         }
-                        catch (e:Exception)
-                        {
-                           doIfErr()
-                        }
+                    }
+                    catch (e: Exception) {
+                        doIfErr()
                     }
                 }
             }
-             Log.d("INDEX", localIndex.toString())
+            Log.d("INDEX", localIndex.toString())
         }
 
         binding.btnPrevLatest.setOnClickListener {
             localIndex -= 1
             displayPost(
-                myList?.get(localIndex)?.gifURL!!,
-                myList[localIndex]?.description!!
+                viewModel.latestGif.value?.get(localIndex)?.gifURL!!,
+                viewModel.latestGif.value!![localIndex].description!!
             )
             Log.d("INDEX", localIndex.toString())
             if (localIndex == 0) binding.btnPrevLatest.isEnabled = false
         }
 
-        binding.buttonRepeatLatest.setOnClickListener {
+        binding.buttonRepeatLatest?.setOnClickListener {
             scope.launch {
                 try {
-                    loadPost(currentPage)
+                    loadPost()
                     displayPost(
-                        myList?.get(localIndex)?.gifURL!!,
-                        myList[localIndex]?.description!!
+                        viewModel.latestGif.value?.get(localIndex)?.gifURL!!,
+                        viewModel.latestGif.value?.get(localIndex)?.description!!
                     )
-                }
-                catch (e:Exception)
-                {
+                } catch (e: Exception) {
                     doIfErr()
                 }
             }
@@ -118,28 +104,28 @@ class LatestFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         localIndex = 0
-        myList?.clear()
-        currentPage = 0
     }
-    //При старте запускаем и загружаем запрос
-    private suspend fun loadPost(page: Int) {
+
+    //При старте загружаем и показываем запрос
+    private suspend fun loadPost() {
         try {
-            val response = RetrofitService().api.getGifs(page).result
-            if (response != null) {
-                if (response.isNotEmpty()) {
-                    binding.btnNextLatest.visibility = View.VISIBLE
-                    binding.btnPrevLatest.visibility = View.VISIBLE
-                    binding.buttonRepeatLatest.visibility = View.GONE
+            viewModel.fetchLatestGif(page)
+            viewModel.latestGif.value?.get(localIndex)
+                ?.let {
+                    it.gifURL?.let { it1 ->
+                        viewModel.latestGif.value!![localIndex].let { it2 ->
+                            it2.description?.let { it3 ->
+                                displayPost(
+                                    it1,
+                                    it3
+                                )
+                            }
+                        }
+                    }
                 }
-            }
-            for (i in 0..4) {
-                myList?.add(response?.get(i)!!)
-            }
-            println("Size of list: ${myList?.size}")
-        }
-        catch (e: Exception)
-        {
-           doIfErr()
+        } catch (e: Exception) {
+            println("Error is $e")
+            doIfErr()
         }
     }
 
@@ -152,9 +138,8 @@ class LatestFragment : Fragment() {
 
         val requestOptions = RequestOptions()
         requestOptions.placeholder(circularProgressDrawable)
-        requestOptions.error(R.drawable.error128).fitCenter()
+        requestOptions.error(R.drawable.error128)
         requestOptions.skipMemoryCache(true)
-        requestOptions.centerCrop()
         Glide.with(this)
             .load(url.replace("http", "https"))
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -163,12 +148,37 @@ class LatestFragment : Fragment() {
             .into(binding.gifurlLatest)
         binding.textViewGifLatest.text = description
     }
-    private fun doIfErr()
-    {
+
+    private fun doIfErr() {
         binding.gifurlLatest.setImageResource(R.drawable.error128)
-        binding.textViewGifLatest.text = "Произошла ошибка при загрузке данных. Проверьте подключение к сети"
-        binding.btnNextLatest.visibility = View.GONE
-        binding.btnPrevLatest.visibility = View.GONE
-        binding.buttonRepeatLatest.visibility = View.VISIBLE
+        binding.textViewGifLatest.text =
+            "Произошла ошибка при загрузке данных. Проверьте подключение к сети"
+        hideNextButton()
+        hidePrevButton()
+        showRepeatButton()
+    }
+
+    private fun showPrevButton() {
+        binding.btnPrevLatest.visibility = View.VISIBLE
+    }
+
+    private fun hidePrevButton() {
+        binding.btnPrevLatest.visibility = View.INVISIBLE
+    }
+
+    private fun showNextButton() {
+        binding.btnNextLatest.visibility = View.VISIBLE
+    }
+
+    private fun hideNextButton() {
+        binding.btnNextLatest.visibility = View.INVISIBLE
+    }
+
+    private fun showRepeatButton() {
+        binding.buttonRepeatLatest?.visibility = View.VISIBLE
+    }
+
+    private fun hideRepeatButton() {
+        binding.buttonRepeatLatest?.visibility = View.GONE
     }
 }

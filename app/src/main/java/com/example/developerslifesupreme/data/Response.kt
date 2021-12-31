@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Response(
 	@SerializedName("result")
-	val result: List<ResultItem?>? = null,
+	val result: List<ResultItem>,
 
 	@SerializedName("totalCount")
 	val totalCount: Int? = null

@@ -1,29 +1,31 @@
 package com.example.developerslifesupreme.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.example.developerslifesupreme.MainActivity
 import com.example.developerslifesupreme.R
-import com.example.developerslifesupreme.data.ResultItem
+import com.example.developerslifesupreme.Utils.Companion.bestPage
 import com.example.developerslifesupreme.databinding.FragmentBestBinding
-import com.example.developerslifesupreme.network.RetrofitService
+import com.example.developerslifesupreme.viewmodel.BestGifViewModel
+import com.example.developerslifesupreme.viewmodel.BestGifViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 
 class BestFragment : Fragment() {
-    private var currentPageBest = 0
+    private lateinit var bestViewModel: BestGifViewModel
     private val scope = CoroutineScope(Dispatchers.Main)
-    private val bestList: MutableList<ResultItem?>? = mutableListOf()
     private var bestIndex = 0
     private var _binding: FragmentBestBinding? = null
     private val binding get() = _binding!!
@@ -35,67 +37,57 @@ class BestFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        scope.launch {
-            try {
-                loadBestPosts(currentPageBest)
-                displayPostBest(
-                    bestList?.get(bestIndex)?.gifURL!!,
-                    bestList[bestIndex]?.description!!
-                )
-            }
-            catch (e:Exception)
-            {
-                doIfErr()
-            }
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bestViewModel = ViewModelProvider(
+            this,
+            BestGifViewModelFactory((requireActivity() as MainActivity).repository)
+        ).get(BestGifViewModel::class.java)
+        scope.launch { loadBestPosts() }
         binding.btnPrevBest.isEnabled = false
-        binding.btnNextBest.setOnClickListener{
+        binding.btnNextBest.setOnClickListener {
             bestIndex++
             if (bestIndex > 0) binding.btnPrevBest.isEnabled = true
-                if (bestIndex < bestList!!.size) {
-                    displayPostBest(bestList[bestIndex]?.gifURL!!, bestList[bestIndex]?.description!!)
-                } else
-                {
-                    scope.launch {
-                        try {
-                            if (bestList.size % 5 == 0) {
-                                currentPageBest++
-                                loadBestPosts(currentPageBest)
-                            }
+            if (bestIndex < bestViewModel.bestGif.value!!.size) {
+                displayPostBest(
+                    bestViewModel.bestGif.value?.get(bestIndex)?.gifURL!!,
+                    bestViewModel.bestGif.value?.get(bestIndex)?.description!!
+                )
+            } else {
+                scope.launch {
+                    try {
+                        if (bestViewModel.bestGif.value!!.size % 5 == 0) {
+                            bestPage++
+                            loadBestPosts()
                             displayPostBest(
-                                bestList[bestIndex]?.gifURL!!,
-                                bestList[bestIndex]?.description!!
+                                bestViewModel.bestGif.value?.get(bestIndex)?.gifURL!!,
+                                bestViewModel.bestGif.value?.get(bestIndex)?.description!!
                             )
                         }
-                        catch (e:Exception)
-                        {
-                            doIfErr()
-                        }
+                    } catch (e: Exception) {
+                        doIfErr()
                     }
                 }
+            }
         }
         binding.btnPrevBest.setOnClickListener {
             bestIndex--
-            displayPostBest(bestList?.get(bestIndex)?.gifURL!!, bestList[bestIndex]?.description!!)
+            displayPostBest(
+                bestViewModel.bestGif.value?.get(bestIndex)?.gifURL!!,
+                bestViewModel.bestGif.value?.get(bestIndex)?.description!!
+            )
             if (bestIndex == 0) binding.btnPrevBest.isEnabled = false
         }
-        binding.buttonRepeatBest.setOnClickListener {
+        binding.buttonRepeatBest?.setOnClickListener {
             scope.launch {
                 try {
-                    loadBestPosts(currentPageBest)
+                    loadBestPosts()
                     displayPostBest(
-                        bestList?.get(bestIndex)?.gifURL!!,
-                        bestList[bestIndex]?.description!!
+                        bestViewModel.bestGif.value?.get(bestIndex)?.gifURL!!,
+                        bestViewModel.bestGif.value?.get(bestIndex)?.description!!
                     )
-                }
-                catch (e:Exception)
-                {
+                } catch (e: Exception) {
                     doIfErr()
                 }
             }
@@ -105,32 +97,30 @@ class BestFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         bestIndex = 0
-        bestList?.clear()
-        currentPageBest = 0
     }
 
-    private suspend fun loadBestPosts(page: Int) {
+    private suspend fun loadBestPosts() {
         try {
-            val response = RetrofitService().api.getGifsDaily(page).result
-            if (response != null) {
-                if (response.isNotEmpty()) {
-                    binding.btnNextBest.visibility = View.VISIBLE
-                    binding.btnPrevBest.visibility = View.VISIBLE
-                    binding.buttonRepeatBest.visibility = View.GONE
+            bestViewModel.fetchBestGif(bestPage)
+            bestViewModel.bestGif.value?.get(bestIndex)
+                ?.let {
+                    it.gifURL?.let { it1 ->
+                        bestViewModel.bestGif.value!![bestIndex].let { it2 ->
+                            it2.description?.let { it3 ->
+                                displayPostBest(
+                                    it1,
+                                    it3
+                                )
+                            }
+                        }
+                    }
                 }
-            }
-            for (i in 0..4) {
-                bestList?.add(response?.get(i)!!)
-            }
-            println("Size of Bestlist: ${bestList?.size}")
-        }
-        catch (e: Exception)
-        {
-           // println(e)
-          doIfErr()
+        } catch (e: Exception) {
+            doIfErr()
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun displayPostBest(url: String, description: String) {
         val circularProgressDrawable = CircularProgressDrawable(requireContext())
         circularProgressDrawable.strokeWidth = 10f
@@ -139,9 +129,8 @@ class BestFragment : Fragment() {
 
         val requestOptions = RequestOptions()
         requestOptions.placeholder(circularProgressDrawable)
-        requestOptions.error(R.drawable.error128).fitCenter()
+        requestOptions.error(R.drawable.error128)
         requestOptions.skipMemoryCache(true)
-        requestOptions.centerCrop()
         Glide.with(this)
             .load(url.replace("http", "https"))
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -150,12 +139,37 @@ class BestFragment : Fragment() {
             .into(binding.gifurlBest)
         binding.textViewGifBest.text = description
     }
-    private fun doIfErr()
-    {
+
+    private fun doIfErr() {
         binding.gifurlBest.setImageResource(R.drawable.error128)
-        binding.textViewGifBest.text = "Произошла ошибка при загрузке данных. Проверьте подключение к сети"
-        binding.btnNextBest.visibility = View.GONE
-        binding.btnPrevBest.visibility = View.GONE
-        binding.buttonRepeatBest.visibility = View.VISIBLE
+        binding.textViewGifBest.text =
+            "Произошла ошибка при загрузке данных. Проверьте подключение к сети"
+        hideNextButton()
+        hidePrevButton()
+        showRepeatButton()
+    }
+
+    private fun showPrevButton() {
+        binding.btnPrevBest.visibility = View.VISIBLE
+    }
+
+    private fun hidePrevButton() {
+        binding.btnPrevBest.visibility = View.INVISIBLE
+    }
+
+    private fun showNextButton() {
+        binding.btnNextBest.visibility = View.VISIBLE
+    }
+
+    private fun hideNextButton() {
+        binding.btnNextBest.visibility = View.INVISIBLE
+    }
+
+    private fun showRepeatButton() {
+        binding.buttonRepeatBest?.visibility = View.VISIBLE
+    }
+
+    private fun hideRepeatButton() {
+        binding.buttonRepeatBest?.visibility = View.GONE
     }
 }

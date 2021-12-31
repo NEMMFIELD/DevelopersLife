@@ -13,9 +13,7 @@ import kotlinx.coroutines.withContext
 
 class GifViewModel(private val repository: GifsRepo):ViewModel() {
     private val _mutableRandomGif = MutableLiveData<List<ResultItem>>(emptyList())
-     val randomGif :LiveData<List<ResultItem>> get() = _mutableRandomGif
-    val scope = CoroutineScope(Dispatchers.Main)
-
+    val randomGif :LiveData<List<ResultItem>> get() = _mutableRandomGif
 
    suspend fun fetchRandomGif()
     {
