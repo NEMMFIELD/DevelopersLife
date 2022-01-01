@@ -86,7 +86,7 @@ class LatestFragment : Fragment() {
             if (localIndex == 0) binding.btnPrevLatest.isEnabled = false
         }
 
-        binding.buttonRepeatLatest?.setOnClickListener {
+        binding.btnRepeatLatest.setOnClickListener {
             scope.launch {
                 try {
                     loadPost()
@@ -175,10 +175,10 @@ class LatestFragment : Fragment() {
     }
 
     private fun showRepeatButton() {
-        binding.buttonRepeatLatest?.visibility = View.VISIBLE
+        binding.btnRepeatLatest.visibility = View.VISIBLE
     }
 
     private fun hideRepeatButton() {
-        binding.buttonRepeatLatest?.visibility = View.GONE
+        binding.btnRepeatLatest.visibility = View.GONE
     }
 }

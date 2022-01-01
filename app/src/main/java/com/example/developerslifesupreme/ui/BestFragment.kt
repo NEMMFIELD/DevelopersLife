@@ -79,7 +79,7 @@ class BestFragment : Fragment() {
             )
             if (bestIndex == 0) binding.btnPrevBest.isEnabled = false
         }
-        binding.buttonRepeatBest?.setOnClickListener {
+        binding.btnRepeatBest.setOnClickListener {
             scope.launch {
                 try {
                     loadBestPosts()
@@ -166,10 +166,10 @@ class BestFragment : Fragment() {
     }
 
     private fun showRepeatButton() {
-        binding.buttonRepeatBest?.visibility = View.VISIBLE
+        binding.btnRepeatBest.visibility = View.VISIBLE
     }
 
     private fun hideRepeatButton() {
-        binding.buttonRepeatBest?.visibility = View.GONE
+        binding.btnRepeatBest.visibility = View.GONE
     }
 }

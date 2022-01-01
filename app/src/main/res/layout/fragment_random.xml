@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="3dp"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -24,7 +23,8 @@
         <ImageView
             android:id="@+id/gifurl_random"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:contentDescription="Gif image" />
 
         <TextView
@@ -32,8 +32,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="35dp"
             android:padding="10dp"
             android:textSize="18sp"/>
+
+        <Button
+            android:id="@+id/btn_repeat_random"
+            android:layout_width="wrap_content"
+            android:text="@string/repeat_button"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center" />
     </FrameLayout>
 
     <LinearLayout
