@@ -147,6 +147,7 @@ class BestFragment : Fragment() {
         hideNextButton()
         hidePrevButton()
         showRepeatButton()
+        hideProgressBar()
     }
 
     private fun showPrevButton() {
@@ -171,5 +172,10 @@ class BestFragment : Fragment() {
 
     private fun hideRepeatButton() {
         binding.btnRepeatBest.visibility = View.GONE
+    }
+
+    private fun hideProgressBar()
+    {
+        binding.progressCircularBest.visibility = View.INVISIBLE
     }
 }

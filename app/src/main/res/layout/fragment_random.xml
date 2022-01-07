@@ -17,8 +17,7 @@
             android:id="@+id/progress_circular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
 
         <ImageView
             android:id="@+id/gifurl_random"
@@ -32,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:textColor="@color/black"
             android:layout_marginBottom="35dp"
             android:padding="10dp"
             android:textSize="18sp"/>
@@ -39,6 +39,7 @@
         <Button
             android:id="@+id/btn_repeat_random"
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:text="@string/repeat_button"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center" />
@@ -55,7 +56,7 @@
             android:id="@+id/btn_prev_random"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/leftarrow"
             android:contentDescription="Previous button" />
 
@@ -63,7 +64,7 @@
             android:id="@+id/btn_next_random"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/arrowsicon"
             android:contentDescription="Forward button" />
     </LinearLayout>

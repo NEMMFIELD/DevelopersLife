@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 class RandomFragment : Fragment() {
     private lateinit var viewModel: GifViewModel
     private val scope = CoroutineScope(Dispatchers.Main)
-    //private var myList: MutableList<ResultItem?>? = ArrayList()
     private var index: Int = 0
     private var _binding: FragmentRandomBinding? = null
     private val binding get() = _binding!!
@@ -102,15 +101,6 @@ class RandomFragment : Fragment() {
         binding.btnNextRandom.visibility = View.VISIBLE
         binding.btnPrevRandom.visibility = View.VISIBLE
         binding.btnRepeatRandom.visibility = View.GONE
-        /*  viewModel.randomGif.value?.gifURL.let {
-              it?.let { it1 ->
-                  displayPost(
-                      it1,
-                      viewModel.randomGif.value?.description!!
-                  )
-              }
-          }
-          myList?.add(viewModel.randomGif.value)*/
         viewModel.randomGif.value?.get(index)
             ?.let {
                 it.gifURL?.let { it1 ->
@@ -158,7 +148,7 @@ class RandomFragment : Fragment() {
         hideNextButton()
         hidePrevButton()
         showRepeatButton()
-        binding.progressCircular.visibility = View.INVISIBLE
+        hideProgressBar()
     }
 
     private fun showPrevButton() {
@@ -183,6 +173,10 @@ class RandomFragment : Fragment() {
 
     private fun hideRepeatButton() {
         binding.btnRepeatRandom.visibility = View.GONE
+    }
+
+    private fun hideProgressBar() {
+        binding.progressCircular.visibility = View.INVISIBLE
     }
 
 }

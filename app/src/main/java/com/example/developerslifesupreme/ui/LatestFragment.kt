@@ -67,8 +67,7 @@ class LatestFragment : Fragment() {
                                 viewModel.latestGif.value!![localIndex].description!!
                             )
                         }
-                    }
-                    catch (e: Exception) {
+                    } catch (e: Exception) {
                         doIfErr()
                     }
                 }
@@ -156,6 +155,7 @@ class LatestFragment : Fragment() {
         hideNextButton()
         hidePrevButton()
         showRepeatButton()
+        hideProgressBar()
     }
 
     private fun showPrevButton() {
@@ -180,5 +180,9 @@ class LatestFragment : Fragment() {
 
     private fun hideRepeatButton() {
         binding.btnRepeatLatest.visibility = View.GONE
+    }
+
+    private fun hideProgressBar() {
+        binding.progressCircularLatest.visibility = View.INVISIBLE
     }
 }

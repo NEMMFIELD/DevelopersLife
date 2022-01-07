@@ -39,6 +39,7 @@
             android:id="@+id/btn_repeat_best"
             android:layout_width="wrap_content"
             android:text="@string/repeat_button"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"/>
     </FrameLayout>
@@ -54,7 +55,7 @@
             android:id="@+id/btn_prev_best"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/leftarrow"
             android:contentDescription="Previous button" />
 
@@ -62,7 +63,7 @@
             android:id="@+id/btn_next_best"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/arrowsicon"
             android:contentDescription="Forward button" />
 
